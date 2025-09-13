@@ -1,9 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 
@@ -11,20 +11,29 @@ import (
 )
 
 var (
-	flagDir      string
-	flagTemplate string
-	flagStatus   string
-	flagDate     string
-	flagOut      string
+	// Build-time variables (set by goreleaser)
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+
+	// Command flags
+	flagDir         string
+	flagTemplate    string
+	flagStatus      string
+	flagDate        string
+	flagOut         string
+	flagProjectName string
+	flagProjectURL  string
 )
 
 func main() {
 	root := &cobra.Command{
-		Use:   "adr",
-		Short: "Manage Architecture Decision Records (ADRs)",
+		Use:     "adrctl",
+		Short:   "Manage Architecture Decision Records (ADRs)",
+		Version: fmt.Sprintf("%s (commit: %s, built: %s)", version, commit, date),
 	}
 
-	root.PersistentFlags().StringVar(&flagDir, "dir", "docs/adr", "ADR directory")
+	root.PersistentFlags().StringVar(&flagDir, "dir", "ADRs", "ADR directory")
 
 	cmdInit := &cobra.Command{
 		Use:   "init",
@@ -59,20 +68,22 @@ func main() {
 		Short: "Generate or update index.md for ADRs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if flagOut == "" {
-				return errors.New("--out is required (e.g., --out docs/adr/index.md)")
+				flagOut = filepath.Join(flagDir, "index.md")
 			}
 			entries, err := adr.Scan(flagDir)
 			if err != nil {
 				return err
 			}
-			if err := adr.WriteIndex(flagOut, entries); err != nil {
+			if err := adr.WriteIndex(flagOut, entries, flagProjectName, flagProjectURL); err != nil {
 				return err
 			}
 			fmt.Fprintln(os.Stdout, flagOut)
 			return nil
 		},
 	}
-	cmdIndex.Flags().StringVar(&flagOut, "out", "", "Output index path (e.g., docs/adr/index.md)")
+	cmdIndex.Flags().StringVar(&flagOut, "out", "", "Output index path (defaults to <dir>/index.md)")
+	cmdIndex.Flags().StringVar(&flagProjectName, "project-name", "", "Project name to display in index header")
+	cmdIndex.Flags().StringVar(&flagProjectURL, "project-url", "", "Project URL to link in index header")
 
 	root.AddCommand(cmdInit, cmdNew, cmdIndex)
 

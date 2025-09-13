@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+# Pre-commit hook to automatically update ADR index when ADR files are modified
+# 
+# To install this hook:
+# 1. Copy this file to .git/hooks/pre-commit
+# 2. Make it executable: chmod +x .git/hooks/pre-commit
+# 3. Ensure adrctl is installed: go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest
+
+set -e
+
+# Default ADR directory (adjust if your setup is different)
+ADR_DIR="ADRs"
+INDEX_FILE="$ADR_DIR/index.md"
+
+# Check if ADR directory exists
+if [ ! -d "$ADR_DIR" ]; then
+    echo "ADR directory '$ADR_DIR' not found, skipping ADR index update"
+    exit 0
+fi
+
+# Check if adrctl is available
+if ! command -v adrctl &> /dev/null; then
+    echo "Warning: adrctl not found. Install with: go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest"
+    echo "Skipping ADR index update"
+    exit 0
+fi
+
+# Check if any ADR files are being committed
+adr_files=$(git diff --cached --name-only --diff-filter=ACM | grep "^$ADR_DIR/.*\.md$" | grep -v "index\.md$" || true)
+
+if [ -n "$adr_files" ]; then
+    echo "ADR files modified, updating index..."
+    
+    # Generate new index
+    adrctl index
+    
+    # Check if index was modified
+    if [ -f "$INDEX_FILE" ] && [ -n "$(git status --porcelain "$INDEX_FILE")" ]; then
+        echo "ADR index updated, adding to commit"
+        git add "$INDEX_FILE"
+    fi
+fi
+
+exit 0

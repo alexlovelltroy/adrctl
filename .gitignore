@@ -1,0 +1,29 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Output of goreleaser
+/dist/
+
+# IDE/editor files
+*.swp
+*.swo
+*.idea/
+.vscode/
+*.log
+
+# Coverage reports
+coverage.out
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# LLM files
+.claude/
+.gptcache/
