@@ -39,7 +39,7 @@ jobs:
         mkdir -p test-adrs
         ./adrctl init --dir test-adrs
         ./adrctl new "Test ADR" --dir test-adrs
-        ./adrctl index --out test-adrs/index.md
+        ./adrctl index --dir test-adrs --out test-adrs/index.md
 
 
 
