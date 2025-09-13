@@ -20,10 +20,10 @@ jobs:
           # Fetch full history for proper git operations
           fetch-depth: 0
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
+      - name: Install adrctl
+        run: |
+          curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz
+          sudo mv adrctl /usr/local/bin/
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
@@ -32,9 +32,6 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
           git_user_signingkey: true
           git_commit_gpgsign: true
-
-      - name: Install adrctl
-        run: go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest
 
       - name: Generate ADR index
         run: adrctl index --project-name "${{ github.event.repository.name }}" --project-url "${{ github.event.repository.html_url }}"

@@ -4,7 +4,30 @@ A small, dependency-light Go CLI for managing Architecture Decision Records (ADR
 
 ## Installation
 
-### From Release (Recommended)
+### Pre-built Binaries (Recommended)
+Download the latest release for your platform from [GitHub Releases](https://github.com/alexlovelltroy/adrctl/releases).
+
+**Quick install on macOS/Linux:**
+```bash
+# macOS (Apple Silicon)
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Darwin_arm64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+
+# macOS (Intel)
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Darwin_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+
+# Linux (x86_64)
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+
+# Linux (ARM64)
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_arm64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+```
+
+**Supported platforms:**
+- **Linux**: x86_64, ARM64 (with deb, rpm, apk packages)
+- **macOS**: Intel (x86_64), Apple Silicon (ARM64)
+
+### Go Install
+For Go developers:
 ```bash
 go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest
 ```
@@ -15,14 +38,6 @@ git clone https://github.com/alexlovelltroy/adrctl.git
 cd adrctl
 go build -o adrctl ./cmd/adrctl
 ```
-
-### Pre-built Binaries
-Download platform-specific binaries from the [releases page](https://github.com/alexlovelltroy/adrctl/releases).
-
-Supported platforms:
-- **Linux**: x86_64, ARM64
-- **macOS**: Intel (x86_64), Apple Silicon (ARM64)
-- **Package managers**: Available via Homebrew and system packages (deb, rpm, apk)
 
 ## Features
 - `adrctl init` — scaffold an ADR directory (defaults to `ADRs/`).
@@ -74,11 +89,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
       - name: Install adrctl
-        run: go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest
+        run: |
+          curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz
+          sudo mv adrctl /usr/local/bin/
       - name: Generate ADR index
         run: adrctl index --project-name "${{ github.event.repository.name }}" --project-url "${{ github.event.repository.html_url }}"
       - name: Commit changes (if any)

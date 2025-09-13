@@ -21,7 +21,9 @@ fi
 
 # Check if adrctl is available
 if ! command -v adrctl &> /dev/null; then
-    echo "Warning: adrctl not found. Install with: go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest"
+    echo "Warning: adrctl not found."
+    echo "Install from: https://github.com/alexlovelltroy/adrctl/releases"
+    echo "Or for Go developers: go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest"
     echo "Skipping ADR index update"
     exit 0
 fi
