@@ -10,16 +10,16 @@ Download the latest release for your platform from [GitHub Releases](https://git
 **Quick install on macOS/Linux:**
 ```bash
 # macOS (Apple Silicon)
-curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Darwin_arm64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Darwin_arm64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
 
 # macOS (Intel)
-curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Darwin_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Darwin_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
 
 # Linux (x86_64)
-curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
 
 # Linux (ARM64)
-curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_arm64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Linux_arm64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
 ```
 
 **Supported platforms:**
@@ -91,7 +91,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install adrctl
         run: |
-          curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz
+          curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Linux_x86_64.tar.gz | tar xz
           sudo mv adrctl /usr/local/bin/
       - name: Generate ADR index
         run: adrctl index --project-name "${{ github.event.repository.name }}" --project-url "${{ github.event.repository.html_url }}"

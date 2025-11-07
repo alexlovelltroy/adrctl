@@ -7,7 +7,7 @@ This pre-commit hook automatically updates your ADR index file whenever ADR file
 1. **Install adrctl** (if not already installed):
    ```bash
    # Download latest release
-   curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+   curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
    
    # Or for Go developers
    go install github.com/alexlovelltroy/adrctl/cmd/adrctl@latest

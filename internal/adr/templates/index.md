@@ -22,7 +22,7 @@ This project uses **adrctl** for ADR management. To get started:
 
 ```bash
 # Install adrctl (download from [releases](https://github.com/alexlovelltroy/adrctl/releases))
-curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.1.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
+curl -L https://github.com/alexlovelltroy/adrctl/releases/latest/download/adrctl_0.2.0_Linux_x86_64.tar.gz | tar xz && sudo mv adrctl /usr/local/bin/
 
 # Create a new ADR
 adrctl new "Your ADR Title"
