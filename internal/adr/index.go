@@ -29,17 +29,31 @@ func Scan(dir string) ([]Entry, error) {
 		return nil, err
 	}
 	for _, it := range items {
-		if it.IsDir() || !strings.HasSuffix(it.Name(), ".md") || strings.EqualFold(it.Name(), "index.md") {
+		name := it.Name()
+		// Skip non-markdown files and directories
+		if it.IsDir() || !strings.HasSuffix(name, ".md") {
 			continue
 		}
-		path := filepath.Join(dir, it.Name())
+		// Only include ADR files that start with a numeric prefix, e.g. 0001-some-decision.md
+		// This avoids picking up README.md, template.md, or other non-ADR markdown files.
+		n, hasNum := parseLeadingNumber(name)
+		if !hasNum {
+			continue
+		}
+		path := filepath.Join(dir, name)
 		meta, err := ParseADR(path)
 		if err != nil {
 			// Best-effort: attempt to keep going, but include a minimal entry
-			if n, ok := parseLeadingNumber(it.Name()); ok {
-				ents = append(ents, Entry{Number: n, ID: fmt.Sprintf("%04d", n), Title: it.Name(), Status: "", Date: "", File: it.Name()})
-			}
+			ents = append(ents, Entry{Number: n, ID: fmt.Sprintf("%04d", n), Title: name, Status: "", Date: "", File: name})
 			continue
+		}
+		// If parser succeeded but didn't capture a Number, fall back to numeric prefix
+		if meta.Number == 0 && hasNum {
+			meta.Number = n
+		}
+		// Ensure we have some title (parser may have failed to derive one)
+		if meta.Title == "" {
+			meta.Title = name
 		}
 		ents = append(ents, Entry{
 			Number: meta.Number,
@@ -47,7 +61,7 @@ func Scan(dir string) ([]Entry, error) {
 			Title:  meta.Title,
 			Status: meta.Status,
 			Date:   meta.Date,
-			File:   it.Name(),
+			File:   name,
 		})
 	}
 	// sort by Number
